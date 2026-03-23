@@ -1,0 +1,70 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "assets/uploads"
+public_folder: "/assets/uploads"
+publish_mode: simple
+site_url: "/"
+logo_url: "/assets/hero_bg.jpg"
+
+collections:
+  - name: "site"
+    label: "网站设置"
+    delete: false
+    editor:
+      preview: false
+    files:
+      - name: "site-settings"
+        label: "联系信息与站点设置"
+        file: "content/site.json"
+        format: "json"
+        fields:
+          - { label: "品牌名称", name: "brand", widget: "string" }
+          - { label: "WhatsApp 标题", name: "whatsapp_label", widget: "string", required: false }
+          - { label: "WhatsApp 文本", name: "whatsapp_value", widget: "string", required: false }
+          - { label: "WhatsApp 链接", name: "whatsapp_link", widget: "string", required: false }
+          - { label: "WeChat 标题", name: "wechat_label", widget: "string", required: false }
+          - { label: "WeChat 文本", name: "wechat_value", widget: "string", required: false }
+          - { label: "商务邮箱标题", name: "email_label", widget: "string", required: false }
+          - { label: "商务邮箱", name: "email_value", widget: "string", required: false }
+          - { label: "联系区说明", name: "contact_note", widget: "text", required: false }
+
+  - name: "categories"
+    label: "商品管理（类目）"
+    label_singular: "类目"
+    folder: "content/categories"
+    create: true
+    extension: "json"
+    format: "json"
+    identifier_field: "title"
+    slug: "{{fields.slug}}"
+    summary: "{{fields.title}} · {{fields.slug}}"
+    editor:
+      preview: false
+    fields:
+      - { label: "类目名称", name: "title", widget: "string" }
+      - { label: "类目标识（slug）", name: "slug", widget: "string", hint: "例如 magnets、bottle-openers、keychains。新增类目请使用英文小写和连字符。" }
+      - { label: "标签文字", name: "label", widget: "string", hint: "例如 Magnet、Bottle opener、Keychain" }
+      - { label: "排序", name: "order", widget: "number", value_type: "int", min: 1, required: false }
+      - { label: "首页眉标", name: "home_label", widget: "string", required: false }
+      - { label: "首页说明", name: "section_copy", widget: "text" }
+      - { label: "类目页说明", name: "page_intro", widget: "text" }
+      - label: "适配渠道"
+        name: "buyer_fit"
+        widget: "list"
+        required: false
+        allow_add: true
+        field: { label: "渠道", name: "item", widget: "string" }
+      - { label: "默认卡片说明", name: "default_note", widget: "text", required: false }
+      - label: "商品列表"
+        name: "products"
+        widget: "list"
+        summary: "{{fields.name}}"
+        allow_add: true
+        fields:
+          - { label: "商品名称", name: "name", widget: "string" }
+          - { label: "图片", name: "image", widget: "image", choose_url: false }
+          - { label: "图片 alt", name: "alt", widget: "string", required: false }
+          - { label: "标签", name: "badge", widget: "string", required: false }
+          - { label: "卡片说明", name: "note", widget: "text", required: false }

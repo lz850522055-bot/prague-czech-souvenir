@@ -1,0 +1,53 @@
+{
+  "title": "Bottle Openers",
+  "slug": "bottle-openers",
+  "label": "Bottle opener",
+  "order": 2,
+  "home_label": "Bottle Openers",
+  "section_copy": "Functional Prague-theme bottle openers that give stores a practical souvenir line with stronger everyday-use value and easy trial-order potential.",
+  "page_intro": "Bottle openers are useful when a store wants souvenir products with a practical angle. Good for tourist counters, beer-focused gift corners, and low-risk assortment testing.",
+  "buyer_fit": [
+    "Gift stores",
+    "Tourist shops",
+    "Beer-theme displays",
+    "Mixed souvenir racks"
+  ],
+  "default_note": "Suitable for souvenir shops, museum shops, visitor stores, and low-MOQ product testing.",
+  "products": [
+    {
+      "name": "Clock Tower Bottle Opener",
+      "image": "assets/bottle-openers_01.jpg",
+      "alt": "Clock Tower Bottle Opener",
+      "note": "Functional souvenir item suited to tourist gift counters.",
+      "badge": "Bottle opener"
+    },
+    {
+      "name": "Praha Skyline Bottle Opener",
+      "image": "assets/bottle-openers_02.jpg",
+      "alt": "Praha Skyline Bottle Opener",
+      "note": "A Prague-themed utility gift for easy trial orders.",
+      "badge": "Bottle opener"
+    },
+    {
+      "name": "Beer Stein Bottle Opener",
+      "image": "assets/bottle-openers_03.jpg",
+      "alt": "Beer Stein Bottle Opener",
+      "note": "Fits beer-related displays and Czech gift assortments.",
+      "badge": "Bottle opener"
+    },
+    {
+      "name": "Gothic Bottle Opener",
+      "image": "assets/bottle-openers_04.jpg",
+      "alt": "Gothic Bottle Opener",
+      "note": "Adds architectural style to opener selections.",
+      "badge": "Bottle opener"
+    },
+    {
+      "name": "Motorcycle Bottle Opener",
+      "image": "assets/bottle-openers_05.jpg",
+      "alt": "Motorcycle Bottle Opener",
+      "note": "A novelty utility piece for broader souvenir mixes.",
+      "badge": "Bottle opener"
+    }
+  ]
+}

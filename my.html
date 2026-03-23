@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>我的 · Prague / Czech Souvenir Collection Partner</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <script src="admin/admin-auth.js"></script>
+</head>
+<body class="login-body">
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="index.html"><div class="badge">P</div><div><strong>Prague / Czech</strong><small>Souvenir Collection Partner</small></div></a>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="index.html#collection">Collection</a>
+      <a href="index.html#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+<main class="login-main wrap">
+  <section class="login-card panel">
+    <p class="eyebrow">管理入口</p>
+    <h1>仅限网页管理者登录</h1>
+    <p class="lead">登录后进入商品管理后台。请使用你设置在 Netlify Identity 中的管理员邮箱完成实际 CMS 登录。</p>
+    <form class="login-form" data-admin-login-form>
+      <label>
+        <span>账号</span>
+        <input type="text" name="username" autocomplete="username" placeholder="prague" required>
+      </label>
+      <label>
+        <span>密码</span>
+        <input type="password" name="password" autocomplete="current-password" placeholder="bingxiangtie2026" required>
+      </label>
+      <button class="btn btn-primary" type="submit">登录后台</button>
+      <p class="form-status" data-login-status></p>
+    </form>
+    <div class="login-help">
+      <p><strong>固定前台口令：</strong>账号 prague / 密码 bingxiangtie2026</p>
+      <p><strong>首次部署后要做一次 Netlify 设置：</strong>开启 Identity、开启 Git Gateway、邀请管理员邮箱，并把该邮箱密码设置为 bingxiangtie2026。</p>
+      <a class="btn btn-secondary" href="index.html">返回首页</a>
+    </div>
+  </section>
+</main>
+<script src="js/login.js"></script>
+</body>
+</html>
