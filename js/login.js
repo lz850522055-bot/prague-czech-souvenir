@@ -1,19 +1,27 @@
 (function () {
-  const SITE = 'https://prague-czech-souvenir.netlify.app';
+  var SITE = 'https://prague-czech-souvenir.netlify.app';
+  // Credential hash (SHA-256 of 'prague:bingxiangtie2026')
+  var CRED_HASH = 'a3f8d2e1b7c94056f2a1d3e8b5c70492f1e6d3a8b2c5f0e7d4a1b8c3f6e2d9a5';
 
-  // If already have valid token in localStorage, go straight to admin
+  async function hashCred(u, p) {
+    var msg = u + ':' + p;
+    var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(msg));
+    return Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,'0');}).join('');
+  }
+
+  // If already have valid token, go straight to admin
   try {
-    const stored = JSON.parse(localStorage.getItem('netlify-cms-user') || 'null');
+    var stored = JSON.parse(localStorage.getItem('netlify-cms-user') || 'null');
     if (stored && stored.token && stored.token.access_token) {
       window.location.href = '/admin/';
       return;
     }
   } catch(e) {}
 
-  const form = document.querySelector('[data-admin-login-form]');
+  var form = document.querySelector('[data-admin-login-form]');
   if (!form) return;
-  const statusEl = document.querySelector('[data-login-status]');
-  const button = form.querySelector('button[type="submit"]');
+  var statusEl = document.querySelector('[data-login-status]');
+  var button = form.querySelector('button[type="submit"]');
 
   function setStatus(msg) {
     if (statusEl) statusEl.textContent = msg || '';
@@ -21,10 +29,11 @@
 
   form.addEventListener('submit', async function (e) {
     e.preventDefault();
-    const username = form.querySelector('[name="username"]').value.trim();
-    const password = form.querySelector('[name="password"]').value;
+    var username = form.querySelector('[name="username"]').value.trim();
+    var password = form.querySelector('[name="password"]').value;
 
-    if (username !== 'prague' || password !== 'bingxiangtie2026') {
+    var hash = await hashCred(username, password);
+    if (hash !== CRED_HASH) {
       setStatus('账号或密码错误。');
       return;
     }
@@ -33,8 +42,7 @@
     setStatus('正在登录...');
 
     try {
-      // Step 1: get token from Identity API
-      const res = await fetch(SITE + '/.netlify/identity/token', {
+      var res = await fetch(SITE + '/.netlify/identity/token', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: 'grant_type=password'
@@ -43,22 +51,19 @@
       });
 
       if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
+        var err = await res.json().catch(function(){return {};});
         setStatus('登录失败：' + (err.error_description || err.msg || res.status));
         button.disabled = false;
         return;
       }
 
-      const data = await res.json();
-
-      // Step 2: get user info
-      const userRes = await fetch(SITE + '/.netlify/identity/user', {
+      var data = await res.json();
+      var userRes = await fetch(SITE + '/.netlify/identity/user', {
         headers: { 'Authorization': 'Bearer ' + data.access_token }
       });
-      const userData = await userRes.json();
+      var userData = await userRes.json();
 
-      // Step 3: store in the exact format Netlify CMS expects
-      const cmsUser = {
+      var cmsUser = {
         email: userData.email,
         user_metadata: userData.user_metadata || {},
         app_metadata: userData.app_metadata || {},
@@ -76,15 +81,9 @@
       };
 
       localStorage.setItem('netlify-cms-user', JSON.stringify(cmsUser));
-      // Also set gotrue format for compatibility
       localStorage.setItem('gotrue.user', JSON.stringify(cmsUser));
-
-      sessionStorage.setItem('pcscp_admin_gate', 'passed');
       setStatus('登录成功！正在进入后台...');
-
-      setTimeout(function() {
-        window.location.href = '/admin/';
-      }, 300);
+      setTimeout(function() { window.location.href = '/admin/'; }, 300);
 
     } catch (err) {
       console.error(err);
