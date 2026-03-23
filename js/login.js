@@ -1,10 +1,9 @@
 (function () {
+  // Auto-redirect if already logged in via Netlify Identity
   if (window.netlifyIdentity) {
     window.netlifyIdentity.on('init', function (user) {
       if (user) {
         sessionStorage.setItem('pcscp_admin_gate', 'passed');
-        const status = document.querySelector('[data-login-status]');
-        if (status) status.textContent = 'You are already signed in. Redirecting to the dashboard...';
         window.location.href = '/admin/';
       }
     });
@@ -34,16 +33,31 @@
     sessionStorage.setItem('pcscp_admin_gate', 'passed');
 
     try {
-      if (window.ADMIN_EMAIL && window.netlifyIdentity) {
-        await window.netlifyIdentity.login(window.ADMIN_EMAIL, password);
+      // Use Identity API directly instead of widget popup
+      const siteUrl = window.location.origin;
+      const res = await fetch(siteUrl + '/.netlify/identity/token', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'grant_type=password&username=' + encodeURIComponent(window.ADMIN_EMAIL || '') + '&password=' + encodeURIComponent(password)
+      });
+      if (res.ok) {
+        const data = await res.json();
+        // Store token for CMS use
+        localStorage.setItem('gotrue.user', JSON.stringify({
+          access_token: data.access_token,
+          refresh_token: data.refresh_token,
+          token_type: data.token_type,
+          expires_in: data.expires_in
+        }));
         window.location.href = '/admin/';
         return;
+      } else {
+        const err = await res.json();
+        setStatus('Identity 登录失败：' + (err.error_description || err.msg || res.status));
       }
-
-      window.location.href = '/admin/';
     } catch (error) {
       console.error(error);
-      setStatus('前台口令已通过，但 Netlify Identity 登录未完成。请确认 admin/admin-auth.js 中已填写管理员邮箱，并在 Netlify Identity 中把该邮箱的密码设置为 bingxiangtie2026。');
+      setStatus('登录出错，请稍后重试。');
     } finally {
       button.disabled = false;
     }
