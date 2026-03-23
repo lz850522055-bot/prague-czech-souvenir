@@ -1,15 +1,12 @@
 (function () {
   var SITE = 'https://prague-czech-souvenir.netlify.app';
-  // Credential hash (SHA-256 of 'prague:bingxiangtie2026')
-  var CRED_HASH = 'a3f8d2e1b7c94056f2a1d3e8b5c70492f1e6d3a8b2c5f0e7d4a1b8c3f6e2d9a5';
+  var CRED_HASH = 'fc0d943058369b9fcb58afa214c4ab3f04a61a7554c7bb27c949232697c9badc';
 
   async function hashCred(u, p) {
-    var msg = u + ':' + p;
-    var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(msg));
+    var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(u + ':' + p));
     return Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,'0');}).join('');
   }
 
-  // If already have valid token, go straight to admin
   try {
     var stored = JSON.parse(localStorage.getItem('netlify-cms-user') || 'null');
     if (stored && stored.token && stored.token.access_token) {
@@ -45,9 +42,7 @@
       var res = await fetch(SITE + '/.netlify/identity/token', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: 'grant_type=password'
-          + '&username=' + encodeURIComponent(window.ADMIN_EMAIL || '')
-          + '&password=' + encodeURIComponent(password)
+        body: 'grant_type=password&username=' + encodeURIComponent(window.ADMIN_EMAIL || '') + '&password=' + encodeURIComponent(password)
       });
 
       if (!res.ok) {
