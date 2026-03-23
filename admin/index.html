@@ -6,30 +6,52 @@
   <title>商品管理后台</title>
   <link rel="stylesheet" href="../styles.css">
   <script>
-    // Guard: must have valid token in localStorage, otherwise redirect to /my
-    (function() {
-      try {
-        var u = JSON.parse(localStorage.getItem('netlify-cms-user') || 'null');
-        if (!u || !u.token || !u.token.access_token) {
-          window.location.replace('/my');
-        }
-      } catch(e) {
+  // Check token, if missing redirect to /my
+  (function() {
+    try {
+      var u = JSON.parse(localStorage.getItem('netlify-cms-user') || 'null');
+      if (!u || !u.token || !u.token.access_token) {
         window.location.replace('/my');
+        return;
       }
-    })();
+      // Pre-inject GoTrue user so Decap CMS skips its login screen
+      var gotrueKey = 'gotrue.user';
+      var existing = localStorage.getItem(gotrueKey);
+      if (!existing) {
+        // Build gotrue-compatible object from our stored user
+        var gt = {
+          access_token: u.token.access_token,
+          refresh_token: u.token.refresh_token,
+          token_type: 'bearer',
+          expires_in: u.token.expires_in,
+          expires_at: u.token.expires_at,
+          email: u.email,
+          id: u.id,
+          aud: u.aud || '',
+          role: u.role || '',
+          app_metadata: u.app_metadata || { provider: 'email' },
+          user_metadata: u.user_metadata || {},
+          url: 'https://prague-czech-souvenir.netlify.app/.netlify/identity'
+        };
+        localStorage.setItem(gotrueKey, JSON.stringify(gt));
+      }
+    } catch(e) {
+      window.location.replace('/my');
+    }
+  })();
   </script>
   <style>
     .admin-shell { padding: 16px; }
     .admin-note { max-width: 1100px; margin: 0 auto 12px; padding: 16px 18px; background: rgba(255,250,245,.95); border: 1px solid rgba(50,35,20,.10); border-radius: 18px; font-size: 14px; color: #5d645f; }
     .admin-note strong { color: #242424; }
-    .admin-note a { color: #cf5140; font-weight: 700; }
+    .admin-note a { color: #cf5140; font-weight: 700; cursor: pointer; }
   </style>
 </head>
 <body>
   <div class="admin-shell">
     <div class="admin-note">
-      <strong>商品管理</strong>：在左侧打开“商品管理（类目）”，进入任意类目后即可新增商品、上传图片、改商品名称；在“网站设置”里可补充商务邮筱。新增或修改后点击右上角发布，前台首页会在 Netlify 重新部署后同步更新。<br>
-      如需退出，请<a href="/my" onclick="localStorage.removeItem('netlify-cms-user');localStorage.removeItem('gotrue.user');">点此退出</a>并重新登录。
+      <strong>商品管理</strong>：在左侧打开“商品管理（类目）”，进入任意类目后即可新增商品、上传图片、改商品名称。新增或修改后点击右上角发布，前台首页会在 Netlify 重新部署后同步更新。<br>
+      如需退出：<a onclick="localStorage.removeItem('netlify-cms-user');localStorage.removeItem('gotrue.user');window.location.href='/my';">[点此退出]</a>
     </div>
     <div id="nc-root"></div>
   </div>
