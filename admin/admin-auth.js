@@ -1,1 +1,1 @@
-window.ADMIN_EMAIL = '';
+window.ADMIN_EMAIL = 'lz850522055@gmail.com';
