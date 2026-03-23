@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>商品管理后台</title>
+  <link rel="stylesheet" href="../styles.css">
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <script src="../js/admin-guard.js"></script>
+  <style>
+    .admin-shell { padding: 16px; }
+    .admin-note { max-width: 1100px; margin: 0 auto 12px; padding: 16px 18px; background: rgba(255,250,245,.95); border: 1px solid rgba(50,35,20,.10); border-radius: 18px; font-size: 14px; color: #5d645f; }
+    .admin-note strong { color: #242424; }
+    .admin-note a { color: #cf5140; font-weight: 700; }
+  </style>
+</head>
+<body>
+  <div class="admin-shell">
+    <div class="admin-note">
+      <strong>商品管理</strong>：在左侧打开“商品管理（类目）”，进入任意类目后即可新增商品、上传图片、改商品名称；在“网站设置”里可补充商务邮箱。新增或修改后点击右上角发布，前台首页会在 Netlify 重新部署后同步更新。<br>
+      如需退出，请使用右上角 Netlify Identity 菜单，或返回 <a href="/my.html">我的</a> 页面重新登录。
+    </div>
+    <div id="nc-root"></div>
+  </div>
+  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+</body>
+</html>

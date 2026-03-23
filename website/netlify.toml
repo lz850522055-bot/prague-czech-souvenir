@@ -1,0 +1,13 @@
+[build]
+  command = "node scripts/build-catalog.js"
+  publish = "."
+
+[[redirects]]
+  from = "/my"
+  to = "/my.html"
+  status = 200
+
+[[redirects]]
+  from = "/category"
+  to = "/category.html"
+  status = 200
